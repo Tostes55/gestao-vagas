@@ -1,3 +1,16 @@
 spring:
   application:
     name: gestao-vagas
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gestao_vagas
+    username: admin
+    password: admin
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+
