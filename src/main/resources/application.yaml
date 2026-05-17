@@ -7,10 +7,19 @@ spring:
     username: admin
     password: admin
 
+
   jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: update
+    generate-ddl: true
+    defer-datasource-initialization: true
+
+logging:
+  level:
+    org.hibernate.sql: DEBUG
+    org.hibernate.tool.hbm2ddl: DEBUG
 

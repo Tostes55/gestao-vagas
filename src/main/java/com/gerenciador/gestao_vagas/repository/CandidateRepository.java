@@ -1,7 +1,7 @@
-package com.gerenciador.gestao_vagas.modules.candidate.repository;
+package com.gerenciador.gestao_vagas.repository;
 
 
-import com.gerenciador.gestao_vagas.modules.candidate.model.CandidateEntity;
+import com.gerenciador.gestao_vagas.model.CandidateEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

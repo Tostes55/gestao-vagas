@@ -1,9 +1,7 @@
-package com.gerenciador.gestao_vagas.modules.candidate.controller;
+package com.gerenciador.gestao_vagas.controller;
 
-import com.gerenciador.gestao_vagas.modules.candidate.exceptions.UserFoundException;
-import com.gerenciador.gestao_vagas.modules.candidate.model.CandidateEntity;
-import com.gerenciador.gestao_vagas.modules.candidate.repository.CandidateRepository;
-import com.gerenciador.gestao_vagas.modules.candidate.service.CandidateService;
+import com.gerenciador.gestao_vagas.model.CandidateEntity;
+import com.gerenciador.gestao_vagas.service.CandidateService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
