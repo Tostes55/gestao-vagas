@@ -12,20 +12,18 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Collections;
 
 @Component
-public class SecurityFilter extends OncePerRequestFilter {
+public class SecurityCandidateFilter extends OncePerRequestFilter {
 
     @Autowired
-    private JWTProvider jwtProvider;
+    private JWTCandidateProvider jwtCandidateProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        // 1. SE FOR ROTA DE AUTENTICAÇÃO, PASSA DIRETO E NÃO FAZ MAIS NADA NESTE FILTRO
         if (request.getRequestURI().startsWith("/company/auth") || request.getRequestURI().startsWith("/candidate/auth")) {
             filterChain.doFilter(request, response);
             return;
@@ -33,33 +31,34 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         String header = request.getHeader("Authorization");
 
-        if (request.getRequestURI().startsWith("/company")) {
+        if (request.getRequestURI().startsWith("/candidate")) {
             if (header != null) {
-                var token = this.jwtProvider.validateToken(header);
+                var token = this.jwtCandidateProvider.validateToken(header);
 
                 if (token == null) {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     return;
                 }
 
+                request.setAttribute("candidate_id", token.getSubject());
                 var roles = token.getClaim("roles").asList(Object.class);
 
                 var grants = roles.stream()
                         .map(role -> new SimpleGrantedAuthority("ROLE_" + role.toString().toUpperCase()))
                         .toList();
 
-                request.setAttribute("company_id", token.getSubject());
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                         token.getSubject(),
                         null,
-                        grants);
+                        grants
+                );
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } else {
-                // Se a rota exige autenticação (ex: cadastrar vaga) e o header veio nulo
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
         }
+
 
         filterChain.doFilter(request, response);
     }

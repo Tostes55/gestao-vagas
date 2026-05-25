@@ -26,5 +26,8 @@ logging:
 
 security:
   token:
-    secret: JAVAGAS_@123#
+    secret_company: JAVAGAS_@123#
+    secret_candidate: JAVAGAS_@123#CANDIDATE
+
+
 
