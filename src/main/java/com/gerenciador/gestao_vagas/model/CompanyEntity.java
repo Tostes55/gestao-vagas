@@ -33,5 +33,8 @@ public class CompanyEntity {
     private String website;
     private String name;
     private String description;
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt =  LocalDateTime.now();
+
+
+
 }

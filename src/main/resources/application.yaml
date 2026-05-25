@@ -24,3 +24,7 @@ logging:
     org.hibernate.sql: DEBUG
     org.hibernate.tool.hbm2ddl: DEBUG
 
+security:
+  token:
+    secret: JAVAGAS_@123#
+
