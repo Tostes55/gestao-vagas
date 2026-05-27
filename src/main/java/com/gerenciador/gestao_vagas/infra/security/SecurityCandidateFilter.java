@@ -23,8 +23,12 @@ public class SecurityCandidateFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+        String requestURI = request.getRequestURI();
 
-        if (request.getRequestURI().startsWith("/company/auth") || request.getRequestURI().startsWith("/candidate/auth")) {
+        if (requestURI.startsWith("/company/auth")
+                || requestURI.startsWith("/candidate/auth")
+                || requestURI.startsWith("/swagger-ui")
+                || requestURI.startsWith("/v3-api-docs")) {
             filterChain.doFilter(request, response);
             return;
         }

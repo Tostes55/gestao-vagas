@@ -25,8 +25,12 @@ public class SecurityFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        // 1. SE FOR ROTA DE AUTENTICAÇÃO, PASSA DIRETO E NÃO FAZ MAIS NADA NESTE FILTRO
-        if (request.getRequestURI().startsWith("/company/auth") || request.getRequestURI().startsWith("/candidate/auth")) {
+        String requestURI = request.getRequestURI();
+
+        if (requestURI.startsWith("/company/auth")
+                || requestURI.startsWith("/candidate/auth")
+                || requestURI.startsWith("/swagger-ui")
+                || requestURI.startsWith("/v3-api-docs")) {
             filterChain.doFilter(request, response);
             return;
         }
