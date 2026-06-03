@@ -11,8 +11,6 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @SpringBootApplication
 @EntityScan("com.gerenciador.gestao_vagas.model")
-@OpenAPIDefinition(info = @Info(title = "Gestao de vagas", description = "API Responsável pela gestão de vagas", version = "1"))
-@SecurityScheme(name = "jwt_auth", scheme = "bearer", bearerFormat = "JWT", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
 public class GestaoVagasApplication {
 
 	public static void main(String[] args) {
