@@ -1,9 +1,12 @@
 package com.gerenciador.gestao_vagas.service;
 
 import com.gerenciador.gestao_vagas.dto.ProfileCandidateResponseDTO;
+import com.gerenciador.gestao_vagas.exceptions.JobNotFoundException;
 import com.gerenciador.gestao_vagas.exceptions.UserFoundException;
+import com.gerenciador.gestao_vagas.exceptions.UserNotFoundException;
 import com.gerenciador.gestao_vagas.model.CandidateEntity;
 import com.gerenciador.gestao_vagas.repository.CandidateRepository;
+import com.gerenciador.gestao_vagas.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +19,9 @@ public class CandidateService {
 
     @Autowired
     private CandidateRepository candidateRepository;
+
+    @Autowired
+    private JobRepository jobRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -48,6 +54,20 @@ public class CandidateService {
                 .id(candidate.getId())
                 .build();
         return candidateDTO;
+
+    }
+
+    public void ApplyJobCandidate (UUID idCandidate, UUID idJob) {
+        var candidate = this.candidateRepository.findById(idCandidate)
+                .orElseThrow(()->{
+                    throw new UserNotFoundException();
+                });
+
+
+        var job = this.jobRepository.findById(idJob)
+                .orElseThrow(()->{
+                    throw new JobNotFoundException();
+                });
 
     }
 

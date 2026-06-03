@@ -7,8 +7,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class AuthCompanyDTO {
 
-    private String password;
     private String username;
+    private String password;
 
 
 }
