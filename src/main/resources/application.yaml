@@ -6,11 +6,28 @@ spring:
     url: jdbc:postgresql://localhost:5432/gestao_vagas
     username: admin
     password: admin
+  devtools:
+    add-properties: false
 
   jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: update
+    generate-ddl: true
+    defer-datasource-initialization: true
+
+logging:
+  level:
+    org.hibernate.sql: DEBUG
+    org.hibernate.tool.hbm2ddl: DEBUG
+
+security:
+  token:
+    secret_company: JAVAGAS_@123#
+    secret_candidate: JAVAGAS_@123#CANDIDATE
+
+
 
