@@ -4,7 +4,9 @@ import com.gerenciador.gestao_vagas.dto.ProfileCandidateResponseDTO;
 import com.gerenciador.gestao_vagas.exceptions.JobNotFoundException;
 import com.gerenciador.gestao_vagas.exceptions.UserFoundException;
 import com.gerenciador.gestao_vagas.exceptions.UserNotFoundException;
+import com.gerenciador.gestao_vagas.model.ApplyJobEntity;
 import com.gerenciador.gestao_vagas.model.CandidateEntity;
+import com.gerenciador.gestao_vagas.repository.ApplyJobRepository;
 import com.gerenciador.gestao_vagas.repository.CandidateRepository;
 import com.gerenciador.gestao_vagas.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ public class CandidateService {
 
     @Autowired
     private JobRepository jobRepository;
+
+    @Autowired
+    private ApplyJobRepository applyJobRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -43,7 +48,7 @@ public class CandidateService {
 
         var candidate = this.candidateRepository.findById(idCandidate)
                 .orElseThrow(()->{
-                    throw new UsernameNotFoundException("User not found");
+                    throw new UserNotFoundException();
                 });
 
         var candidateDTO = ProfileCandidateResponseDTO.builder()
@@ -57,17 +62,26 @@ public class CandidateService {
 
     }
 
-    public void ApplyJobCandidate (UUID idCandidate, UUID idJob) {
-        var candidate = this.candidateRepository.findById(idCandidate)
+    public ApplyJobEntity applyJobCandidate (UUID idCandidate, UUID idJob) {
+        //Valida se o candidato existe
+        this.candidateRepository.findById(idCandidate)
                 .orElseThrow(()->{
                     throw new UserNotFoundException();
                 });
 
-
-        var job = this.jobRepository.findById(idJob)
+        //Valida se a vaga existe
+        this.jobRepository.findById(idJob)
                 .orElseThrow(()->{
                     throw new JobNotFoundException();
                 });
+
+        var applyJob = ApplyJobEntity.builder()
+                .candidateId(idCandidate)
+                .jobId(idJob)
+                .build();
+        applyJob = this.applyJobRepository.save(applyJob);
+
+        return applyJob;
 
     }
 

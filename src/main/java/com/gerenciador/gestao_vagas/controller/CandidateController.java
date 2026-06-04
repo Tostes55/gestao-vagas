@@ -1,6 +1,7 @@
 package com.gerenciador.gestao_vagas.controller;
 
 import com.gerenciador.gestao_vagas.dto.ProfileCandidateResponseDTO;
+import com.gerenciador.gestao_vagas.model.ApplyJobEntity;
 import com.gerenciador.gestao_vagas.model.CandidateEntity;
 import com.gerenciador.gestao_vagas.model.JobEntity;
 import com.gerenciador.gestao_vagas.service.CandidateService;
@@ -75,5 +76,23 @@ public class CandidateController {
     @SecurityRequirement(name = "jwt_auth")
     public List<JobEntity> findAllJobsByFilter(String filter) {
         return  this.jobService.ListAllJobsByFilter(filter);
+    }
+
+    @PostMapping("/job/apply")
+    @PreAuthorize("hasRole('CANDIDATE')")
+    @Operation(summary = "Inscricao do candidato para uma vaga", description = "Essa funcao e responsavel por fazer a inscricao de um candidado em uma vaga")
+    @SecurityRequirement(name = "jwt_auth")
+    public ResponseEntity<Object> applyJob(HttpServletRequest request, @RequestBody UUID idJob) {
+        var idCandidate = request.getAttribute("candidate_id");
+
+        try{
+            var result = this.candidateService.applyJobCandidate(UUID.fromString(idCandidate.toString()), idJob);
+            return ResponseEntity.ok().body(result);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+
+
     }
 }
