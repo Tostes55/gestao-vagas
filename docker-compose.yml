@@ -1,10 +1,56 @@
+version: '3.8'
+
+networks:
+  gv-network:
+    driver: bridge
+
+volumes:
+  prometheus_data:
+  grafana_data:
+
 services:
   postgres:
     container_name: gestao_vagas_postgres
-    image: postgres
+    image: postgres:latest
     ports:
-      - 5432:5432
+      - "5432:5432"
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: gestao_vagas
+    networks:
+      - gv-network
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - gv-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - gv-network
+
+  postgres-exporter:
+    container_name: postgres_exporter
+    image: prometheuscommunity/postgres-exporter
+    ports:
+      - "9187:9187"
+    environment:
+      DATA_SOURCE_NAME: "postgresql://admin:admin@postgres:5432/gestao_vagas?sslmode=disable"
+    networks:
+      - gv-network
+    depends_on:
+      - postgres
