@@ -25,18 +25,20 @@ public class SecurityCompanyFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         String requestURI = request.getRequestURI();
+        String method = request.getMethod();
 
-        if (requestURI.startsWith("/company/auth")
+        if ((requestURI.equals("/company/") && method.equalsIgnoreCase("POST"))
+                || requestURI.startsWith("/company/auth")
                 || requestURI.startsWith("/candidate/auth")
                 || requestURI.startsWith("/swagger-ui")
-                || requestURI.startsWith("/v3-api-docs")) {
+                || requestURI.startsWith("/v3/api-docs")) {
             filterChain.doFilter(request, response);
             return;
         }
 
         String header = request.getHeader("Authorization");
 
-        if (request.getRequestURI().startsWith("/company")) {
+        if (requestURI.startsWith("/company")) {
             if (header != null) {
                 var token = this.jwtProvider.validateToken(header);
 

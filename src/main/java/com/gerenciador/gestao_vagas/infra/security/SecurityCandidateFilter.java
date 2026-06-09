@@ -24,18 +24,20 @@ public class SecurityCandidateFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         String requestURI = request.getRequestURI();
+        String method = request.getMethod();
 
-        if (requestURI.startsWith("/company/auth")
+        if ((requestURI.equals("/candidate/") && method.equalsIgnoreCase("POST"))
+                || requestURI.startsWith("/company/auth")
                 || requestURI.startsWith("/candidate/auth")
                 || requestURI.startsWith("/swagger-ui")
-                || requestURI.startsWith("/v3-api-docs")) {
+                || requestURI.startsWith("/v3/api-docs")) {
             filterChain.doFilter(request, response);
             return;
         }
 
         String header = request.getHeader("Authorization");
 
-        if (request.getRequestURI().startsWith("/candidate")) {
+        if (requestURI.startsWith("/candidate")) {
             if (header != null) {
                 var token = this.jwtCandidateProvider.validateToken(header);
 
@@ -62,7 +64,6 @@ public class SecurityCandidateFilter extends OncePerRequestFilter {
                 return;
             }
         }
-
 
         filterChain.doFilter(request, response);
     }
