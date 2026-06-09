@@ -10,11 +10,6 @@ spring:
   application:
     name: gestao-vagas
 
-#  datasource:
-#    url: jdbc:postgresql://localhost:5432/gestao_vagas
-#    username: admin
-#    password: admin
-
   datasource:
     url: ${DATABASE_URL}
     username: ${DATABASE_USERNAME}
@@ -22,6 +17,12 @@ spring:
 
   devtools:
     add-properties: false
+
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/gestao_vagas
+#    username: admin
+#    password: admin
+
 
 logging:
   level:
